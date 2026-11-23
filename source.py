@@ -32,16 +32,23 @@
 # *How will you use the identified data to answer your project question?*
 # I will compare the data from the three sources to look at salary, job growth, and skills for different IT careers. I will use occupation names and codes to connect the datasets. Then I can use charts to compare the careers and look for patterns in the data.
 
-# In[2]:
+# In[14]:
 
 
 import pandas as pd
 
-bls_projections = pd.read_excel("occupation.xlsx", sheet_name="Table 1.2")
-bls_projections.head()
+bls_projections = pd.read_excel(
+    "occupation.xlsx",
+    sheet_name="Table 1.2",
+    header=2
+)
+
+employment_df = bls_projections.copy()
+
+print(employment_df.columns.tolist())
 
 
-# In[ ]:
+# In[6]:
 
 
 bls_wages = pd.read_excel("wages.xlsx")
@@ -54,7 +61,7 @@ bls_wages.head()
 # Bureau of Labor Statistics (BLS) – Occupational Employment and Wage Statistics data
 # USAJOBS – Occupational Series API
 
-# In[ ]:
+# In[7]:
 
 
 import requests
@@ -80,13 +87,13 @@ usajobs_data
 # In this section, I will explore the IT job market data to compare salaries, job growth, and employment trends.
 # I will also check for missing values, duplicates, and other issues in the datasets.
 
-# In[16]:
+# In[8]:
 
 
 get_ipython().run_line_magic('pip', 'install pandas openpyxl matplotlib seaborn')
 
 
-# In[21]:
+# In[9]:
 
 
 import pandas as pd
@@ -105,7 +112,7 @@ display(wages_df.head())
 print(wages_df.columns.tolist())
 
 
-# In[22]:
+# In[10]:
 
 
 # Statistical summary of employment data
@@ -123,7 +130,7 @@ display(wages_df.describe())
 # 
 # The salary dataset also shows differences in employment levels across occupations. These results will help me compare IT careers and understand which jobs may offer better opportunities.
 
-# In[23]:
+# In[11]:
 
 
 # Check for missing values
@@ -144,7 +151,7 @@ print("Salary Duplicates:", wages_df.duplicated().sum())
 # 
 # Neither dataset has duplicate rows. I will review the missing values and only remove information that is not useful for my analysis.
 
-# In[24]:
+# In[12]:
 
 
 print("Employment Data Types:")
@@ -158,7 +165,7 @@ print(wages_df.dtypes)
 # 
 # Most columns have the correct data types. However, some salary and percentage columns are stored as text instead of numbers. I will convert the columns needed for my analysis so I can compare salaries and job growth correctly.
 
-# In[25]:
+# In[13]:
 
 
 # Convert employment data columns to numbers
@@ -177,7 +184,7 @@ print(employment_df[[
 ]].dtypes)
 
 
-# In[26]:
+# In[14]:
 
 
 # Check the relationship between salary and job growth
@@ -193,7 +200,7 @@ display(correlation)
 # 
 # The correlation between salary and job growth is 0.21. This shows a weak positive relationship. Higher-paying jobs may have slightly higher growth, but salary alone does not strongly predict job growth.
 
-# In[27]:
+# In[15]:
 
 
 import matplotlib.pyplot as plt
@@ -212,7 +219,7 @@ plt.show()
 # 
 # I used a histogram to show how annual salaries are distributed across occupations. Most jobs fall within the lower salary ranges, while fewer jobs have very high salaries. This shows that higher-paying occupations are less common in the dataset.
 
-# In[28]:
+# In[16]:
 
 
 # Show the distribution of job growth
@@ -229,7 +236,7 @@ plt.show()
 # 
 # I used a histogram to show the expected job growth between 2025 and 2035. Most occupations are expected to have small to moderate growth. Some jobs are expected to decline, while a few have much higher growth rates.
 
-# In[29]:
+# In[17]:
 
 
 # Compare salary and job growth
@@ -252,7 +259,7 @@ plt.show()
 # The chart shows that higher salaries do not always mean higher job growth. 
 # Most jobs are grouped in the lower salary ranges, with different growth rates.
 
-# In[30]:
+# In[18]:
 
 
 import seaborn as sns
@@ -286,7 +293,7 @@ sns.barplot(
 # 
 # In this section, I will clean the datasets by checking missing values, duplicates, outliers, and data types. This will help make the data more accurate for my analysis.
 
-# In[31]:
+# In[19]:
 
 
 # Check missing values in both datasets
@@ -297,7 +304,7 @@ print("Salary Missing Values:")
 print(wages_df.isnull().sum())
 
 
-# In[32]:
+# In[20]:
 
 
 # Remove rows missing salary or job growth data
@@ -316,7 +323,7 @@ print(employment_df.isnull().sum())
 # 
 # I found missing values in both datasets. I removed rows from the employment data that were missing salary or job growth information because those values are important for my project. I kept other missing values that do not affect my current analysis.
 
-# In[33]:
+# In[21]:
 
 
 # Check for duplicates
@@ -332,7 +339,7 @@ wages_df = wages_df.drop_duplicates()
 # 
 # I checked both datasets for duplicate rows. I used Python to remove any duplicates so the same information would not be counted twice.
 
-# In[34]:
+# In[22]:
 
 
 # Check the highest and lowest salaries
@@ -384,9 +391,237 @@ print(employment_df["Employment change, percent, 2025–35"].min())
 # 
 # These updates helped me better understand the IT job market and prepare for the next part of my project.
 
-# In[35]:
+# In[23]:
 
 
 # ⚠️ Make sure you run this cell at the end of your notebook before every submission!
 get_ipython().system('jupyter nbconvert --to python source.ipynb')
 
+
+# # Checkpoint 3: Machine Learning
+# 
+# ## 1. Machine Learning Implementation Process
+# 
+# ### EDA
+# 
+# 
+# In this checkpoint, I will use my IT job market data to build machine learning models that predict job growth. I will review the data for missing values and other issues before training the models.
+
+# In[25]:
+
+
+import pandas as pd
+
+# Load the employment dataset
+employment_df = pd.read_excel(
+    "occupation.xlsx",
+    sheet_name="Table 1.2",
+    header=1
+)
+
+print(employment_df.columns.tolist())
+
+# Check the dataset
+print("Dataset Shape:")
+print(employment_df.shape)
+
+print("\nMissing Values:")
+print(employment_df.isnull().sum())
+
+print("\nDuplicate Rows:")
+print(employment_df.duplicated().sum())
+
+print("\nData Types:")
+print(employment_df.dtypes)
+
+
+# ### Prepare: Training and Testing Data
+# 
+# I will use 80% of the data to train my model and 20% to test it. This will help me see how well the model predicts job growth using data it has not seen before.
+
+# In[25]:
+
+
+get_ipython().run_line_magic('pip', 'install scikit-learn')
+
+
+# In[35]:
+
+
+employment_df = pd.read_excel(
+    "occupation.xlsx",
+    sheet_name="Table 1.2",
+    header=1
+)
+
+employment_df.columns = employment_df.columns.astype(str)
+
+
+# In[37]:
+
+
+employment_df.columns = employment_df.columns.astype(str)
+
+
+# In[36]:
+
+
+print(employment_df.columns.tolist())
+
+
+# In[43]:
+
+
+from sklearn.model_selection import train_test_split
+
+features = [
+    "Median annual wage, dollars, 2025",
+    "Employment, 2025",
+    "Typical education needed for entry"
+]
+
+target = "Employment change, percent, 2025–35"
+
+model_df = employment_df.dropna(subset=[target]).copy()
+
+model_df[features[0]] = pd.to_numeric(
+    model_df[features[0]], errors="coerce"
+)
+
+X = model_df[features]
+y = model_df[target]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print("Training records:", len(X_train))
+print("Testing records:", len(X_test))
+
+
+# In[24]:
+
+
+import pandas as pd
+
+preview = pd.read_excel(
+    "occupation.xlsx",
+    sheet_name="Table 1.2",
+    header=None
+)
+
+display(preview.head(6))
+
+
+# ### Process: Data Cleaning Pipeline
+# 
+# I will prepare the data for machine learning by filling in missing values, converting education levels into numbers, and scaling the numerical data. This will help the models work with the information correctly.
+
+# In[44]:
+
+
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+
+# Separate numerical and categorical columns
+numeric_features = features[:2]
+categorical_features = [features[2]]
+
+# Prepare numerical data
+numeric_pipeline = Pipeline([
+    ("imputer", SimpleImputer(strategy="median")),
+    ("scaler", StandardScaler())
+])
+
+# Prepare categorical data
+categorical_pipeline = Pipeline([
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("encoder", OneHotEncoder(handle_unknown="ignore"))
+])
+
+
+# Combine both pipelines
+preprocessor = ColumnTransformer([
+    ("numeric", numeric_pipeline, numeric_features),
+    ("categorical", categorical_pipeline, categorical_features)
+])
+
+print("Data cleaning pipeline created successfully!")
+
+
+# ### Analyze: Training Machine Learning Models
+# 
+# I will train two different models to predict job growth. I will compare their results to see which model performs better.
+
+# In[45]:
+
+
+print(X_train.columns.tolist())
+print(X_train.dtypes)
+
+
+# In[46]:
+
+
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.pipeline import Pipeline
+
+# Model 1: Linear Regression
+linear_model = Pipeline([
+    ("preprocessor", preprocessor),
+    ("model", LinearRegression())
+])
+
+linear_model.fit(X_train, y_train)
+
+# Model 2: Random Forest Regression
+forest_model = Pipeline([
+    ("preprocessor", preprocessor),
+    ("model", RandomForestRegressor(random_state=42))
+])
+
+forest_model.fit(X_train, y_train)
+
+print("Both models trained successfully!")
+
+
+# In[47]:
+
+
+from sklearn.metrics import mean_absolute_error, r2_score
+
+# Make predictions
+linear_predictions = linear_model.predict(X_test)
+forest_predictions = forest_model.predict(X_test)
+
+# Linear Regression results
+print("Linear Regression")
+print("MAE:", mean_absolute_error(y_test, linear_predictions))
+print("R2:", r2_score(y_test, linear_predictions))
+
+# Random Forest results
+print("\nRandom Forest Regression")
+print("MAE:", mean_absolute_error(y_test, forest_predictions))
+print("R2:", r2_score(y_test, forest_predictions))
+
+
+# Evaluate: Model Comparison
+# 
+# I tested two machine learning models to predict job growth in different careers. The Random Forest model performed slightly better than Linear Regression because it had a lower prediction error and a higher R² score.
+# 
+# However, both models had low scores, which means they were not very accurate at explaining job growth. I would choose Random Forest for now, but I could improve the results by adding more useful information to the dataset.
+
+# 2. Prior Feedback and Updates
+# 
+# Prior Feedback
+# 
+# I continued working on my original research question about IT careers, salaries, and job growth. I reviewed my previous work to see what needed improvement.
+# 
+# Project Updates
+# 
+# For Checkpoint 3, I prepared my data for machine learning, divided it into training and testing sets, and created a data cleaning pipeline.
+# 
+# I also trained two machine learning models and compared their results. Random Forest performed slightly better, but both models could still be improved.
